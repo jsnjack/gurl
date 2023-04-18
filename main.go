@@ -68,7 +68,7 @@ func init() {
 	flag.BoolVar(&ver, "version", false, "Print Version Number")
 	flag.BoolVar(&pretty, "pretty", true, "Print Json Pretty Format")
 	flag.BoolVar(&pretty, "p", true, "Print Json Pretty Format")
-	flag.StringVar(&printV, "print", "A", "Print request and response")
+	flag.StringVar(&printV, "print", "HBh", "Print request and response")
 	flag.BoolVar(&form, "form", false, "Submitting as a form")
 	flag.BoolVar(&form, "f", false, "Submitting as a form")
 	flag.BoolVar(&download, "download", false, "Download the url content as file")
