@@ -175,13 +175,20 @@ func main() {
 	}
 	// Proxy Support
 	if proxy != "" {
+		if !strings.Contains(proxy, "://") {
+			proxy = "http://" + proxy
+		}
 		purl, err := url.Parse(proxy)
 		if err != nil {
 			log.Fatal("Proxy Url parse err", err)
 		}
 		httpreq.SetProxy(purl)
 	} else {
-		envURL, err := url.Parse(getEnvAny("HTTP_PROXY", "http_proxy", "HTTPS_PROXY", "https_proxy"))
+		envProxy := getEnvAny("HTTP_PROXY", "http_proxy", "HTTPS_PROXY", "https_proxy")
+		if !strings.Contains(envProxy, "://") {
+			envProxy = "http://" + envProxy
+		}
+		envURL, err := url.Parse(envProxy)
 		if err != nil {
 			log.Fatal("Environment Proxy Url parse err", err)
 		}
