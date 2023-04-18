@@ -106,6 +106,10 @@ func getHTTP(method string, url string, args []string) (r *httplib.BeegoHttpRequ
 }
 
 func formatResponseBody(res *http.Response, httpreq *httplib.BeegoHttpRequest, pretty bool) string {
+	if httpreq.GetRequest().Method == "HEAD" {
+		return ""
+	}
+
 	body, err := httpreq.Bytes()
 	if err != nil {
 		log.Fatalln("can't get the url", err)
