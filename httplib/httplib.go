@@ -428,7 +428,7 @@ func (b *BeegoHttpRequest) SendOut() (*http.Response, error) {
 		if err != nil {
 			return nil, err
 		}
-		defer conn.Close()
+		// defer conn.Close()
 		// Dump prepared request and replace path with absolute URL in the first line
 		reqRaw, err := httputil.DumpRequest(b.req, true)
 		reqRawStr := string(reqRaw)
@@ -441,7 +441,8 @@ func (b *BeegoHttpRequest) SendOut() (*http.Response, error) {
 		fmt.Fprintf(conn, newReqRawStr)
 
 		// parse the raw TCP response into an http.Response object
-		response, err := http.ReadResponse(bufio.NewReader(conn), nil)
+		bodyBuf := bufio.NewReader(conn)
+		response, err := http.ReadResponse(bodyBuf, b.req)
 		if err != nil {
 			return nil, err
 		}
