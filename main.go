@@ -24,7 +24,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -180,13 +179,13 @@ func main() {
 		if err != nil {
 			log.Fatal("Proxy Url parse err", err)
 		}
-		httpreq.SetProxy(http.ProxyURL(purl))
+		httpreq.SetProxy(purl)
 	} else {
-		envURL, err := http.ProxyFromEnvironment(httpreq.GetRequest())
+		envURL, err := url.Parse(getEnvAny("HTTP_PROXY", "http_proxy", "HTTPS_PROXY", "https_proxy"))
 		if err != nil {
 			log.Fatal("Environment Proxy Url parse err", err)
 		}
-		httpreq.SetProxy(http.ProxyURL(envURL))
+		httpreq.SetProxy(envURL)
 	}
 	if body != "" {
 		httpreq.Body(body)
@@ -395,4 +394,13 @@ Example:
 func usage() {
 	fmt.Print(usageInfo)
 	os.Exit(2)
+}
+
+func getEnvAny(names ...string) string {
+	for _, n := range names {
+		if val := os.Getenv(n); val != "" {
+			return val
+		}
+	}
+	return ""
 }
