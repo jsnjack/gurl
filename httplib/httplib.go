@@ -16,12 +16,14 @@
 package httplib
 
 import (
+	"bufio"
 	"bytes"
 	"compress/gzip"
 	"context"
 	"crypto/tls"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"log"
 	"mime/multipart"
@@ -77,7 +79,7 @@ func NewBeegoRequest(rawURL, method string) *BeegoHttpRequest {
 		ProtoMajor: 1,
 		ProtoMinor: 1,
 	}
-	return &BeegoHttpRequest{rawURL, &req, map[string]string{}, map[string]string{}, defaultSetting, &resp, nil, nil}
+	return &BeegoHttpRequest{rawURL, &req, map[string]string{}, map[string]string{}, defaultSetting, &resp, nil, nil, ""}
 }
 
 // Get returns *BeegoHttpRequest with GET method.
@@ -129,6 +131,7 @@ type BeegoHttpRequest struct {
 	resp    *http.Response
 	body    []byte
 	dump    []byte
+	proxy   string
 }
 
 // GetRequest returns the http.Request.
@@ -231,8 +234,10 @@ func (b *BeegoHttpRequest) SetTransport(transport http.RoundTripper) *BeegoHttpR
 	return b
 }
 
-func (b *BeegoHttpRequest) SetProxy(proxy func(*http.Request) (*url.URL, error)) *BeegoHttpRequest {
-	b.setting.Proxy = proxy
+func (b *BeegoHttpRequest) SetProxy(proxy *url.URL) *BeegoHttpRequest {
+	if proxy != nil {
+		b.proxy = proxy.String()
+	}
 	return b
 }
 
@@ -412,6 +417,35 @@ func (b *BeegoHttpRequest) SendOut() (*http.Response, error) {
 			println(err.Error())
 		}
 		b.dump = dump
+	}
+
+	// Proxy is set, manually handle it here
+	if b.proxy != "" {
+		// Clean up the proxy address
+		addr := strings.Replace(b.proxy, "http://", "", 1)
+		addr = strings.Replace(addr, "https://", "", 1)
+		conn, err := net.Dial("tcp", addr)
+		if err != nil {
+			return nil, err
+		}
+		defer conn.Close()
+		// Dump prepared request and replace path with absolute URL in the first line
+		reqRaw, err := httputil.DumpRequest(b.req, true)
+		reqRawStr := string(reqRaw)
+		splittedFull := strings.Split(reqRawStr, "\r\n")
+		splittedFirstLine := strings.Split(splittedFull[0], " ")
+		splittedFull[0] = splittedFirstLine[0] + " " + b.url + " " + splittedFirstLine[2]
+		newReqRawStr := strings.Join(splittedFull, "\r\n")
+
+		// Send the request to the proxy
+		fmt.Fprintf(conn, newReqRawStr)
+
+		// parse the raw TCP response into an http.Response object
+		response, err := http.ReadResponse(bufio.NewReader(conn), nil)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
 	}
 	return client.Do(b.req)
 }
