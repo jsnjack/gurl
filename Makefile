@@ -15,10 +15,10 @@ bin/${BIN}: bin/${BIN}_linux_amd64
 	cp bin/${BIN}_linux_amd64 bin/${BIN}
 
 bin/${BIN}_linux_amd64: version *.go httplib/*.go
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-X github.com/jsnjack/${BIN}/cmd.Version=${VERSION}" -o bin/${BIN}_linux_amd64
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-X main.version=${VERSION}" -o bin/${BIN}_linux_amd64
 
 bin/${BIN}_darwin_amd64: version *.go httplib/*.go
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-X github.com/jsnjack/${BIN}/cmd.Version=${VERSION}" -o bin/${BIN}_darwin_amd64
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-X main.version=${VERSION}" -o bin/${BIN}_darwin_amd64
 
 build: test bin/${BIN} bin/${BIN}_linux_amd64 bin/${BIN}_darwin_amd64
 

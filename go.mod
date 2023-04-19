@@ -1,4 +1,4 @@
-module github.com/shoenig/gurl
+module github.com/jsnjack/gurl
 
 go 1.20
 

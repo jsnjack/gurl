@@ -12,12 +12,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/shoenig/gurl/httplib"
+	"github.com/jsnjack/gurl/httplib"
 )
 
 var defaultSetting = httplib.BeegoHttpSettings{
 	ShowDebug:        true,
-	UserAgent:        "gURL/" + version,
+	UserAgent:        "gURL/v" + version,
 	ConnectTimeout:   60 * time.Second,
 	ReadWriteTimeout: 60 * time.Second,
 	Gzip:             true,

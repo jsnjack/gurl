@@ -40,7 +40,7 @@ This is a fork of [astaxie/bat](https://github.com/astaxie/bat). Thanks to the a
 
 If you only want to install the `gurl` tool:
 
-	go install github.com/shoenig/gurl@latest
+	go install github.com/jsnjack/gurl@latest
 
 Make sure the `~/go/bin` (or `$GOBIN`) is added into `$PATH`.
 
@@ -76,7 +76,7 @@ See the request that is being sent using one of the output options:
 
 Use Github API to post a comment on an issue with authentication:
 
-	$ gurl -a USERNAME POST https://api.github.com/repos/shoenig/gurl/issues/1/comments body='gurl is awesome!'
+	$ gurl -a USERNAME POST https://api.github.com/repos/jsnjack/gurl/issues/1/comments body='gurl is awesome!'
 
 Upload a file using redirected input:
 

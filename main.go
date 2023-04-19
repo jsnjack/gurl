@@ -34,9 +34,10 @@ import (
 	"github.com/shoenig/ignore"
 )
 
+var version = "v0"
+
 const (
-	version              = "v0"
-	printReqHeader uint8 = 1 << (iota - 1)
+	printReqHeader uint8 = 1 << (iota)
 	printReqBody
 	printRespHeader
 	printRespBody

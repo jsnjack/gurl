@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/shoenig/gurl/httplib"
+	"github.com/jsnjack/gurl/httplib"
 )
 
 type result struct {
