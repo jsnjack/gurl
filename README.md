@@ -1,4 +1,8 @@
 # gURL
+
+> What makes this fork special is the way it handles requests via proxy. Instead
+> of CONNECT request it sends GET request with https link in it
+
 Go implemented CLI cURL-like tool for humans. `gurl` can be used for testing, debugging, and generally interacting with HTTP servers.
 
 Inspired by [Httpie](https://github.com/jakubroztocil/httpie). Thanks to the author, Jakub.
@@ -49,8 +53,8 @@ Hello World:
 Synopsis:
 
 	gurl [flags] [METHOD] URL [ITEM [ITEM]]
-	
-See also `gurl --help`.	
+
+See also `gurl --help`.
 
 ### Examples
 
@@ -65,7 +69,7 @@ Any custom HTTP method (such as WebDAV, etc.):
 Submitting forms:
 
 	$ gurl -form=true POST example.com hello=World
-	
+
 See the request that is being sent using one of the output options:
 
 	$ gurl -print="Hhb" example.com
@@ -77,11 +81,11 @@ Use Github API to post a comment on an issue with authentication:
 Upload a file using redirected input:
 
 	$ gurl example.com < file.json
-	
+
 Download a file and save it via redirected output:
 
 	$ gurl example.com/file > file
-	
+
 Download a file wget style:
 
 	$ gurl -download=true example.com/file
@@ -89,14 +93,14 @@ Download a file wget style:
 Set a custom Host header to work around missing DNS records:
 
 	$ gurl localhost:8000 Host:example.com
-	
+
 Following is the detailed documentation. It covers the command syntax, advanced usage, and also features additional examples.
-	
+
 ## HTTP Method
 The name of the HTTP method comes right before the URL argument:
 
 	$ gurl DELETE example.com/todos/7
-	
+
 which looks similar to the actual Request-Line that is sent:
 
 DELETE /todos/7 HTTP/1.1
@@ -114,7 +118,7 @@ Additionally, curl-like shorthand for localhost is supported. This means that, f
 	Host: localhost
 
 	$ gurl :3000/bar
-	
+
 	GET /bar HTTP/1.1
 	Host: localhost:3000
 
@@ -136,7 +140,7 @@ They are key/value pairs specified after the URL. All have in common that they b
 
 
 |       Item Type         |	          Description           |
-| ------------------------| ------------------------------ | 
+| ------------------------| ------------------------------ |
 |HTTP Headers `Name:Value`|Arbitrary HTTP header, e.g. `X-API-Token:123`.|
 |Data Fields `field=value`|Request data fields to be serialized as a JSON object (default), or to be form-encoded (--form, -f).|
 |Form File Fields `field@/dir/file`|Only available with `-form`, `-f`. For example `screenshot@~/Pictures/img.png`. The presence of a file field results in a `multipart/form-data` request.|
@@ -166,7 +170,7 @@ Simple example:
 	Accept-Encoding: gzip, deflate
 	Content-Type: application/json
 	Host: example.org
-	
+
 	{
 	    "name": "John",
 	    "email": "john@example.com"
@@ -198,7 +202,7 @@ Non-string fields use the := separator, which allows you to embed raw JSON into 
 	Accept: application/json
 	Content-Type: application/json
 	Host: api.example.com
-	
+
 	{
 	    "age": 29,
 	    "hobbies": [
@@ -212,11 +216,11 @@ Non-string fields use the := separator, which allows you to embed raw JSON into 
 	        "HTTPie": "http://httpie.org",
 	    }
 	}
-	
+
 Send JSON data stored in a file (see redirected input for more examples):
 
 	$ gurl POST api.example.com/person/1 < person.json
-	
+
 ## Forms
 Submitting forms are very similar to sending JSON requests. Often the only difference is in adding the `-form=true`, `-f` option, which ensures that data fields are serialized correctly and Content-Type is set to, `application/x-www-form-urlencoded; charset=utf-8`.
 
@@ -237,7 +241,7 @@ It is possible to make form data the implicit content type instead of JSON via t
 If one or more file fields is present, the serialization and content type is `multipart/form-data`:
 
 	$ gurl -f=true POST example.com/jobs name='John Smith' cv@~/Documents/cv.pdf
-	
+
 The request above is the same as if the following HTML form were submitted:
 
 ```
@@ -263,7 +267,7 @@ To set custom headers you can use the Header:Value notation:
 	Referer: http://example.com
 	User-Agent: Bacon/1.0
 	X-Foo: Bar
-	
+
 There are a couple of default headers that gurl sets:
 
 	GET / HTTP/1.1
@@ -283,11 +287,11 @@ Basic auth:
 You can specify proxies to be used through the --proxy argument for each protocol (which is included in the value in case of redirects across protocols):
 
 	$ gurl --proxy=http://10.10.1.10:3128 example.org
-	
+
 With Basic authentication:
 
 	$ gurl --proxy=http://user:pass@10.10.1.10:3128 example.org
-	
+
 You can also configure proxies by environment variables HTTP_PROXY and HTTPS_PROXY, and the underlying Requests library will pick them up as well. If you want to disable proxies configured through the environment variables for certain hosts, you can specify them in NO_PROXY.
 
 In your ~/.bash_profile:
