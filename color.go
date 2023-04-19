@@ -33,7 +33,7 @@ func ColorfulRequest(str string) string {
 	if printOption&printReqHeader == printReqHeader {
 		strs := strings.Split(lines[0], " ")
 		strs[0] = Color(strs[0], Magenta)
-		strs[1] = Color(strs[1], Cyan)
+		strs[1] = Color(strs[1], White)
 		strs[2] = Color(strs[2], Magenta)
 		lines[0] = strings.Join(strs, " ")
 	}
@@ -42,8 +42,8 @@ func ColorfulRequest(str string) string {
 		if len(substr) < 2 {
 			continue
 		}
-		substr[0] = Color(substr[0], Gray)
-		substr[1] = Color(strings.Join(substr[1:], ":"), Cyan)
+		substr[0] = Color(substr[0], Cyan)
+		substr[1] = Color(strings.Join(substr[1:], ":"), White)
 		lines[i+1] = strings.Join(substr[:2], ":")
 	}
 	return strings.Join(lines, "\n")
@@ -90,7 +90,7 @@ func ColorfulJson(str string) string {
 					if key {
 						rsli = append(rsli, []rune(ColorStart(Magenta))...)
 					} else if val {
-						rsli = append(rsli, []rune(ColorStart(Cyan))...)
+						rsli = append(rsli, []rune(ColorStart(White))...)
 					}
 					startsemicolon = true
 					key = false
@@ -136,7 +136,7 @@ func ColorfulJson(str string) string {
 					endcolor = false
 				}
 				if val && startcolor {
-					rsli = append(rsli, []rune(ColorStart(Cyan))...)
+					rsli = append(rsli, []rune(ColorStart(White))...)
 					val = false
 					startcolor = false
 					endcolor = false
