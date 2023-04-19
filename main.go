@@ -67,8 +67,7 @@ func init() {
 	flag.BoolVar(&ver, "v", false, "Print Version Number")
 	flag.BoolVar(&ver, "version", false, "Print Version Number")
 	flag.BoolVar(&pretty, "pretty", true, "Print Json Pretty Format")
-	flag.BoolVar(&pretty, "p", true, "Print Json Pretty Format")
-	flag.StringVar(&printV, "print", "HBh", "Print request and response")
+	flag.StringVar(&printV, "p", "HBh", "Print request and response")
 	flag.BoolVar(&form, "form", false, "Submitting as a form")
 	flag.BoolVar(&form, "f", false, "Submitting as a form")
 	flag.BoolVar(&download, "download", false, "Download the url content as file")
@@ -77,7 +76,7 @@ func init() {
 	flag.BoolVar(&insecureSSL, "i", false, "Allow connections to SSL sites without certs")
 	flag.StringVar(&auth, "auth", "", "HTTP authentication username:password, USER[:PASS]")
 	flag.StringVar(&auth, "a", "", "HTTP authentication username:password, USER[:PASS]")
-	flag.StringVar(&proxy, "proxy", "", "Proxy host and port, PROXY_URL")
+	flag.StringVar(&proxy, "x", "", "Proxy host and port, PROXY_URL")
 	flag.BoolVar(&bench, "bench", false, "Sends bench requests to URL")
 	flag.BoolVar(&bench, "b", false, "Sends bench requests to URL")
 	flag.IntVar(&benchN, "b.N", 1000, "Number of requests to run")
@@ -369,10 +368,11 @@ flags:
   -body=""                    Send RAW data as body
   -f, -form=false             Submitting the data as a form
   -j, -json=true              Send the data in a JSON object
-  -p, -pretty=true            Print Json Pretty Format
+  -pretty=true                Print Json Pretty Format
   -i, -insecure=false         Allow connections to SSL sites without certs
-  -proxy=PROXY_URL            Proxy with host and port
-  -print="A"                  String specifying what the output should contain, default will print all information
+  -x=PROXY_URL                Proxy with host and port
+  -p="HBh"                    String specifying what the output should contain
+         "A" all information
          "H" request headers
          "B" request body
          "h" response headers
